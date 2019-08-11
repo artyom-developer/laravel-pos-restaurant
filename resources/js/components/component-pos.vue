@@ -5,41 +5,39 @@
 
           <div class="col-md-4 order-md-2 mb-4">
             <h4 class="d-flex justify-content-between align-items-center mb-3">
-              <span class="text-muted">Your cart</span>
-              <span class="badge badge-secondary badge-pill">3</span>
+              <span class="text-muted">Carrito</span>
+              <span class="badge badge-secondary badge-pill">{{listCarrito.length}}</span>
             </h4>
             <ul class="list-group mb-3">
               <li class="list-group-item d-flex justify-content-between lh-condensed">
                 <div>
-                  <h6 class="my-0">Product name</h6>
-                  <small class="text-muted">Brief description</small>
+                  <h6 class="my-0">Producto</h6>
+                  <small class="text-muted"></small>
                 </div>
-                <span class="text-muted">$12</span>
+                <span class="text-muted">{{listCarrito.lentgh}}</span>
               </li>
-              <li class="list-group-item d-flex justify-content-between lh-condensed">
+              <li v-for="(itemcart,i) in listCarrito" class="list-group-item d-flex justify-content-between lh-condensed">
                 <div>
-                  <h6 class="my-0">Second product</h6>
-                  <small class="text-muted">Brief description</small>
+                  <h6 class="my-0">{{itemcart.nombre}}</h6>
+                  <small class="text-muted">{{itemcart.categoria}}</small>
                 </div>
-                <span class="text-muted">$8</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between lh-condensed">
+
                 <div>
-                  <h6 class="my-0">Third item</h6>
-                  <small class="text-muted">Brief description</small>
+                  <div>
+                    <i class="material-icons"  v-on:click="cambiarCantidad(i,false)">remove_circle_outline</i>
+                    <span class="text-muted"> {{itemcart.cant}}</span>
+                    <i class="material-icons"  v-on:click="cambiarCantidad(i, true)">add_circle_outline</i>
+                  </div>
+                  <span class="text-muted"> {{convertMoney(itemcart.cant * itemcart.precio)}}</span>
                 </div>
-                <span class="text-muted">$5</span>
+
+                <i class="material-icons"  v-on:click="deleteItem(i)">delete</i>
+
               </li>
-              <li class="list-group-item d-flex justify-content-between bg-light">
-                <div class="text-success">
-                  <h6 class="my-0">Promo code</h6>
-                  <small>EXAMPLECODE</small>
-                </div>
-                <span class="text-success">-$5</span>
-              </li>
+
               <li class="list-group-item d-flex justify-content-between">
-                <span>Total (USD)</span>
-                <strong>$20</strong>
+                <span>Total (PESOS)</span>
+                <strong> {{onViewTotal()}}</strong>
               </li>
             </ul>
 
@@ -62,7 +60,7 @@
             <div class="card-body">
               <h5 class="card-title">{{prod.prod_name}}</h5>
               <p class="card-text">{{prod.prod_description}}</p>
-              <a href="#" class="btn btn-primary">{{prod.prod_price}}</a>
+              <a href="#" class="btn btn-primary" v-on:click="addCart(prod)">{{convertMoney(prod.prod_price)}}</a>
             </div>
           </div>
 
@@ -84,6 +82,7 @@
           return{
             listCat:[],
             listProd:[],
+            listCarrito:[],
             selectCategoria: 0
           }
         },
@@ -92,6 +91,19 @@
             this.listProdService()
         },
         methods:{
+          convertMoney(value){
+
+          const formatterPeso = new Intl.NumberFormat('es-CO', {
+             style: 'currency',
+             currency: 'COP',
+             minimumFractionDigits: 0
+           })
+           let valueFinal = formatterPeso.format(value);
+
+
+           return valueFinal
+
+          },
           listProdService(){
 
             axios.get("api/Producto/visible")
@@ -115,7 +127,55 @@
               alert(error)
             })
 
+          },
+          addCart(item){
+            //this.listCarrito.push(item)
+
+            const itemcar = {
+              id : item.prod_id,
+              nombre : item.prod_name,
+              categoria: item.cat_nombre,
+              cant: 1,
+              precio: item.prod_price
+            }
+
+            this.listCarrito.push(itemcar)
+            //alert(JSON.stringify(item))
+          },
+          deleteItem(i){
+            this.listCarrito.splice(i,1)
+          },
+          cambiarCantidad(i,type){
+
+              // sacar variable de carrito
+              const dataCar = this.listCarrito
+
+              // sacar la cantidad de producto
+              let cantd = dataCar[i].cant;
+
+              if (type) {
+                cantd = cantd + 1
+              }
+              else if (type==false&&cantd>=1) {
+                cantd = cantd - 1
+              }
+
+              if ((type==false&&cantd>=1)||type) {
+                dataCar[i].cant = cantd
+                this.listCarrito
+              }
+
+
+          },
+          onViewTotal(){
+            let total = 0
+            this.listCarrito.map((data)=>{
+              total = total + (data.cant * data.precio)
+            })
+
+            return this.convertMoney(total)
           }
+
 
         }
 
