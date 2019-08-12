@@ -8,6 +8,15 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+// main.js
+import Vue from 'vue';
+import VueSweetalert2 from 'vue-sweetalert2';
+
+// If you don't need the styles, do not connect
+import 'sweetalert2/dist/sweetalert2.min.css';
+
+Vue.use(VueSweetalert2);
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -24,6 +33,7 @@ Vue.component('component-main-pos', require('./components/component-pos.vue').de
 Vue.component('component-header-pos', require('./components/header-pos.vue').default);
 Vue.component('component-categoria', require('./components/component-categoria.vue').default);
 Vue.component('component-producto', require('./components/component-producto.vue').default);
+Vue.component('component-orden', require('./components/component-orden.vue').default);
 
 
 /**

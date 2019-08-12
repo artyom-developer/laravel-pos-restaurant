@@ -24,8 +24,13 @@ Route::get('/producto', function () {
     return view('producto');
 });
 
+Route::get('/orden', function () {
+    return view('orden');
+});
+
 // API
 Route::group(['prefix'=>'api'],function(){
+
   Route::post('Categoria/add','API\CategoriaController@add');
   Route::get('Categoria/list','API\CategoriaController@list');
   Route::get('Categoria/disponible','API\CategoriaController@avalaible');
@@ -39,4 +44,7 @@ Route::group(['prefix'=>'api'],function(){
   Route::post('Producto/change-status','API\ProductoController@change_status');
   // product visible for POS
   Route::get('Producto/visible','API\ProductoController@visible');
+  // crear orden y pedido 
+  Route::post('Orden/create','API\OrdenController@create_order');
+
 });

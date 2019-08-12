@@ -39,10 +39,9 @@
                 <span>Total (PESOS)</span>
                 <strong> {{onViewTotal()}}</strong>
               </li>
-
               <li class="list-group-item d-flex justify-content-between">
 
-                <select class="form-control" id="exampleFormControlSelect1"  v-model="SelectMesa" >
+                <select class="form-control" id="exampleFormControlSelect1" @v-model="SelectMesa" >
                   <option value="1">Mesa 1</option>
                   <option value="2">Mesa 2</option>
                   <option value="3">Mesa 3</option>
@@ -51,8 +50,6 @@
                 </select>
 
               </li>
-
-
             </ul>
 
             <button type="button" class="btn btn-success btn-lg btn-block" v-on:click="onSendOrder()">PROCESAR PEDIDO</button>
@@ -196,7 +193,6 @@
           onSendOrder()
           {
 
-            // si es mayor e igual de 1 producto
             if (this.listCarrito.length>=1) {
 
               // sumar todal de los productos
@@ -206,25 +202,22 @@
               })
 
               const formData = new FormData()
-              // array de carrito se convierte en string con el JSON.stringify
               formData.append('pedidos',JSON.stringify(this.listCarrito))
-              // select de mesa
               formData.append('mesa',this.SelectMesa)
-              // total de carrito
               formData.append('total',total)
 
               axios.post("api/Orden/create",formData)
               .then(response => {
+                // limpiar campo
 
-                //alert("Enviado exitosamente");
+                alert("Enviado exitosamente");
 
-                this.$swal.fire(
-                  'Enviado exitosamente!',
-                  'Se envio los ordenó exitosamente',
-                  'success'
-                )
+                // this.$swal.fire(
+                //   'Enviado exitosamente!',
+                //   'Se envio los ordenó exitosamente',
+                //   'success'
+                // )
 
-                // limpia el carrito
                 this.listCarrito = []
               })
               .catch(error => {
