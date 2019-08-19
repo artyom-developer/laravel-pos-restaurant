@@ -1,6 +1,7 @@
 <h1> POS Restaurante Fullstack Vue.js + Laravel </h1>
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/-Ynn1dW9Hx0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+## YouTube
+https://www.youtube.com/watch?v=-Ynn1dW9Hx0&list=PLWMdLTu9kHLo-L6PlejucSi0R_Wu74mqU
 
 ## Installation
 
