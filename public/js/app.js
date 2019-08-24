@@ -1879,21 +1879,57 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       listOrder: []
     };
   },
-  mounted: function mounted() {//this.loadOrder()
+  mounted: function mounted() {
+    this.listOrderService();
   },
   methods: {
-    listCatService: function listCatService() {
+    convertMoney: function convertMoney(value) {
+      var formatterPeso = new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+      });
+      var valueFinal = formatterPeso.format(value);
+      return valueFinal;
+    },
+    listOrderService: function listOrderService() {
       var _this = this;
 
-      axios.get("api/Order/list").then(function (response) {
+      axios.get("api/Orden/list").then(function (response) {
         // cargar datos
-        _this.listCat = response.data;
+        _this.listOrder = response.data;
       })["catch"](function (error) {
         alert(error);
       });
@@ -41409,37 +41445,103 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-8 order-md-1" }, [
-        _c("h4", { staticClass: "mb-3" }, [_vm._v("Pedidos")]),
+        _c("h4", { staticClass: "mb-3" }, [_vm._v("Orden")]),
         _vm._v(" "),
-        _c("table", { staticClass: "table table-striped" }, [
+        _c("table", { staticClass: "table t " }, [
           _vm._m(0),
           _vm._v(" "),
           _c(
             "tbody",
-            _vm._l(_vm.listOrder, function(data) {
-              return _c("tr", [
-                _c("td"),
-                _vm._v(" "),
-                _c("td", [
-                  data.cat_active == 1
-                    ? _c(
+            [
+              _vm._l(_vm.listOrder, function(data) {
+                return [
+                  _c("tr", [
+                    _c("td", [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(data.ord_id) +
+                          "\n              "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c("b", [_vm._v(" Mesa " + _vm._s(data.ord_mesa))]),
+                      _vm._v(" " + _vm._s(data.ord_fecha) + "\n              ")
+                    ]),
+                    _vm._v(" "),
+                    _c("th", { attrs: { scope: "col" } }),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.convertMoney(data.ord_valor)) +
+                          "\n              "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
                         "button",
                         {
-                          staticClass: "btn btn-info",
+                          staticClass: "btn btn-light",
                           attrs: { type: "button" },
                           on: {
                             click: function($event) {
-                              return _vm.updateSatus(data.cat_id, 0)
+                              data.show = !data.show
                             }
                           }
                         },
-                        [_vm._v("Activo")]
+                        [_vm._v("Detalles")]
                       )
-                    : _vm._e()
-                ])
-              ])
-            }),
-            0
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm._l(data.pedidos, function(pedido) {
+                    return _c(
+                      "tr",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: data.show,
+                            expression: "data.show"
+                          }
+                        ]
+                      },
+                      [
+                        _c("td"),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            "\n                " +
+                              _vm._s(pedido.prod_name) +
+                              "\n              "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            "\n                " +
+                              _vm._s(pedido.ped_cantidad) +
+                              "\n              "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            "\n                " +
+                              _vm._s(_vm.convertMoney(pedido.ped_valor)) +
+                              "\n              "
+                          )
+                        ])
+                      ]
+                    )
+                  })
+                ]
+              })
+            ],
+            2
           )
         ])
       ])
@@ -41455,9 +41557,9 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", { attrs: { scope: "col" } }, [_vm._v("#")]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Hora")]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Orden")]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Mesa")]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Cantidad")]),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Valor")]),
         _vm._v(" "),

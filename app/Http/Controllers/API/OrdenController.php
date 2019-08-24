@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Orden;
 use App\Pedidos;
 
+use Carbon\Carbon;
+
 class OrdenController extends Controller
 {
     //
@@ -40,4 +42,27 @@ class OrdenController extends Controller
        $response['success'] = true;
        $response['message'] = "Guardo exitosamente";
    }
+
+   public function list_order(){
+
+     $fecha_hoy = Carbon::now()->format("Y-m-d");
+
+     $orden = Orden::whereDate("ord_fecha",$fecha_hoy)->get();
+
+     foreach ($orden as  $value) {
+       // code...
+       // adicionar nueva variable para mostrar o ocutar
+       $value['show'] = false;
+       // adicionar variable para detalles pedido
+       $value['pedidos'] = Pedidos::join('productos', 'productos.prod_id', '=', 'pedidos.ped_producto')
+       ->where("ped_ordern",$value->ord_id)->get();
+
+     }
+
+     return $orden;
+   }
+
+
+
+
 }

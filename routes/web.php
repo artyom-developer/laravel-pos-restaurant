@@ -44,7 +44,9 @@ Route::group(['prefix'=>'api'],function(){
   Route::post('Producto/change-status','API\ProductoController@change_status');
   // product visible for POS
   Route::get('Producto/visible','API\ProductoController@visible');
-  // crear orden y pedido 
+  // crear orden y pedido
   Route::post('Orden/create','API\OrdenController@create_order');
+  // listar orden
+  Route::get('Orden/list','API\OrdenController@list_order');
 
 });

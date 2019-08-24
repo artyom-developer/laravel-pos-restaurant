@@ -12,44 +12,28 @@
             <tr>
               <th scope="col">#</th>
               <th scope="col">Orden</th>
-              <th scope="col">Cantidad</th>
               <th scope="col">Valor</th>
               <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
             <template v-for="data in listOrder">
-              <tr >
-                <td>
-                  {{data.ord_id}}
-                </td>
-                <td>
-                  <b> Mesa {{data.ord_mesa}}</b> {{data.ord_fecha}}
-                </td>
-                <th scope="col"></th>
-                <td>
-                  {{convertMoney(data.ord_valor)}}
-                </td>
+              <tr style="background-color: #cecece; ">
+                <td>{{data.ord_id}}</td>
+                <td><b>Mesa {{data.ord_mesa}}</b> - {{data.ord_fecha}}</td>
+                <td>{{data.ord_valor}}</td>
                 <td>
                   <button type="button" class="btn btn-light"  v-on:click="data.show=!data.show">Detalles</button>
                 </td>
               </tr>
-
-              <tr v-show="data.show" v-for="pedido in data.pedidos" >
-                <td>
-                </td>
-                <td>
-                  {{pedido.prod_name}}
-                </td>
-                <td>
-                  {{pedido.ped_cantidad}}
-                </td>
-                <td>
-                  {{convertMoney(pedido.ped_valor)}}
-                </td>
+              <!-- Detalles del orden -->
+              <tr v-for="pedido in data.pedidos" v-show="data.show">
+                <td>{{data.ord_id}}</td>
+                <td>{{pedido.prod_name}}</td>
+                <td>{{pedido.ped_cantidad}}</td>
+                <td>{{pedido.ped_valor}}</td>
               </tr>
             </template>
-
           </tbody>
         </table>
 
@@ -70,22 +54,9 @@
           }
         },
         mounted() {
-           this.listOrderService()
+            this.listOrderService()
         },
         methods:{
-          convertMoney(value){
-
-          const formatterPeso = new Intl.NumberFormat('es-CO', {
-             style: 'currency',
-             currency: 'COP',
-             minimumFractionDigits: 0
-           })
-           let valueFinal = formatterPeso.format(value);
-
-
-           return valueFinal
-
-          },
           listOrderService()
           {
             axios.get("api/Orden/list")
